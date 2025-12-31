@@ -1,0 +1,18 @@
+{
+  "name": "carla-docs",
+  "version": "1.0.0",
+  "description": "CARLA 自动驾驶仿真平台技术文档",
+  "type": "module",
+  "scripts": {
+    "dev": "vitepress dev content",
+    "build": "vitepress build content",
+    "preview": "vitepress preview content"
+  },
+  "devDependencies": {
+    "vitepress": "^1.5.0"
+  },
+  "dependencies": {
+    "mermaid": "^11.12.2",
+    "vitepress-plugin-mermaid": "^2.0.17"
+  }
+}
