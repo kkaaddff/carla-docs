@@ -1,10 +1,6 @@
 import { defineConfig } from "vitepress";
 import { withMermaid } from "vitepress-plugin-mermaid";
 
-// CARLA GitHub 仓库基础 URL
-const CARLA_GITHUB_BASE =
-  "https://github.com/carla-simulator/carla/blob/master";
-
 export default withMermaid(
   defineConfig({
     // GitHub Pages 基础路径配置

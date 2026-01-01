@@ -1,8 +1,7 @@
 # C++ 客户端
 
-> **引用文件**
-> **本文档中引用的文件**
 
+**本文档中引用的文件**  
 - [Client.h](https://github.com/carla-simulator/carla/blob/ue5-dev/LibCarla/source/carla/client/Client.h)
 - [Simulator.h](https://github.com/carla-simulator/carla/blob/ue5-dev/LibCarla/source/carla/client/detail/Simulator.h)
 - [Simulator.cpp](https://github.com/carla-simulator/carla/blob/ue5-dev/LibCarla/source/carla/client/detail/Simulator.cpp)
@@ -11,8 +10,8 @@
 - [TimeoutException.h](https://github.com/carla-simulator/carla/blob/ue5-dev/LibCarla/source/carla/client/TimeoutException.h)
 - [TimeoutException.cpp](https://github.com/carla-simulator/carla/blob/ue5-dev/LibCarla/source/carla/client/TimeoutException.cpp)
 
-## 目录
 
+## 目录
 1. [简介](#简介)
 2. [项目结构](#项目结构)
 3. [核心组件](#核心组件)
@@ -24,21 +23,18 @@
 9. [结论](#结论)
 
 ## 简介
-
-本文档详细介绍了 CARLA 模拟器的 C++客户端实现，重点分析了 Client 类和 Simulator 类的功能。文档涵盖了如何通过 IP 地址和端口连接到 CARLA 服务器，解释了构造函数参数和连接超时设置，以及客户端的异步操作模式。同时，深入解析了 Simulator 类在客户端-服务器通信中的作用，以及如何管理与仿真器的会话状态。基于示例代码提供了完整的连接、断开连接和错误处理代码示例，并解释了客户端的线程安全特性及在多线程环境下的使用注意事项。
+本文档详细介绍了CARLA模拟器的C++客户端实现，重点分析了Client类和Simulator类的功能。文档涵盖了如何通过IP地址和端口连接到CARLA服务器，解释了构造函数参数和连接超时设置，以及客户端的异步操作模式。同时，深入解析了Simulator类在客户端-服务器通信中的作用，以及如何管理与仿真器的会话状态。基于示例代码提供了完整的连接、断开连接和错误处理代码示例，并解释了客户端的线程安全特性及在多线程环境下的使用注意事项。
 
 ## 项目结构
-
 CARLA C++客户端的项目结构组织清晰，主要分为以下几个部分：
-
-- **CMake/**: 包含 CMake 构建系统的配置文件
+- **CMake/**: 包含CMake构建系统的配置文件
 - **Docs/**: 包含项目文档
-- **Examples/CppClient/**: 包含 C++客户端示例代码
+- **Examples/CppClient/**: 包含C++客户端示例代码
 - **LibCarla/**: 包含核心客户端库源代码
-- **PythonAPI/**: 包含 Python API 实现
-- **Unreal/**: 包含 Unreal 引擎相关代码
+- **PythonAPI/**: 包含Python API实现
+- **Unreal/**: 包含Unreal引擎相关代码
 
-C++客户端的核心功能主要位于 LibCarla/source/carla/client/目录下，其中 Client 类是主要的接口类，而 Simulator 类负责底层的通信和状态管理。
+C++客户端的核心功能主要位于LibCarla/source/carla/client/目录下，其中Client类是主要的接口类，而Simulator类负责底层的通信和状态管理。
 
 ```mermaid
 graph TD
@@ -54,30 +50,25 @@ C --> J[会话状态管理]
 D --> K[main.cpp]
 ```
 
-**图表来源**
-
+**图表来源**  
 - [Client.h](https://github.com/carla-simulator/carla/blob/ue5-dev/LibCarla/source/carla/client/Client.h)
 - [Simulator.h](https://github.com/carla-simulator/carla/blob/ue5-dev/LibCarla/source/carla/client/detail/Simulator.h)
 - [main.cpp](https://github.com/carla-simulator/carla/blob/ue5-dev/Examples/CppClient/main.cpp)
 
-**本节来源**
-
+**本节来源**  
 - [Client.h](https://github.com/carla-simulator/carla/blob/ue5-dev/LibCarla/source/carla/client/Client.h)
 - [Simulator.h](https://github.com/carla-simulator/carla/blob/ue5-dev/LibCarla/source/carla/client/detail/Simulator.h)
 
 ## 核心组件
+C++客户端的核心组件包括Client类、Simulator类和相关的辅助类。Client类作为主要的接口类，提供了连接CARLA服务器、加载世界、管理演员等高级功能。Simulator类则负责底层的通信细节，包括RPC调用和流媒体数据传输。TimeoutException类用于处理网络超时异常，确保客户端能够优雅地处理连接问题。
 
-C++客户端的核心组件包括 Client 类、Simulator 类和相关的辅助类。Client 类作为主要的接口类，提供了连接 CARLA 服务器、加载世界、管理演员等高级功能。Simulator 类则负责底层的通信细节，包括 RPC 调用和流媒体数据传输。TimeoutException 类用于处理网络超时异常，确保客户端能够优雅地处理连接问题。
-
-**本节来源**
-
+**本节来源**  
 - [Client.h](https://github.com/carla-simulator/carla/blob/ue5-dev/LibCarla/source/carla/client/Client.h)
 - [Simulator.h](https://github.com/carla-simulator/carla/blob/ue5-dev/LibCarla/source/carla/client/detail/Simulator.h)
 - [TimeoutException.h](https://github.com/carla-simulator/carla/blob/ue5-dev/LibCarla/source/carla/client/TimeoutException.h)
 
 ## 架构概述
-
-CARLA C++客户端采用分层架构设计，上层的 Client 类提供简洁的 API 接口，下层的 Simulator 类处理复杂的通信逻辑。这种设计模式使得客户端既易于使用又具有良好的扩展性。客户端通过 RPC 协议与 CARLA 服务器通信，同时使用流媒体协议传输传感器数据等大量信息。
+CARLA C++客户端采用分层架构设计，上层的Client类提供简洁的API接口，下层的Simulator类处理复杂的通信逻辑。这种设计模式使得客户端既易于使用又具有良好的扩展性。客户端通过RPC协议与CARLA服务器通信，同时使用流媒体协议传输传感器数据等大量信息。
 
 ```mermaid
 graph LR
@@ -92,16 +83,14 @@ World --> Simulator
 Actor --> Simulator
 ```
 
-**图表来源**
-
+**图表来源**  
 - [Client.h](https://github.com/carla-simulator/carla/blob/ue5-dev/LibCarla/source/carla/client/Client.h)
 - [Simulator.h](https://github.com/carla-simulator/carla/blob/ue5-dev/LibCarla/source/carla/client/detail/Simulator.h)
 
 ## 详细组件分析
 
-### Client 类分析
-
-Client 类是 C++客户端的主要接口，负责管理与 CARLA 服务器的连接和会话。它通过构造函数接收服务器的 IP 地址和端口号，并创建 Simulator 实例来处理底层通信。
+### Client类分析
+Client类是C++客户端的主要接口，负责管理与CARLA服务器的连接和会话。它通过构造函数接收服务器的IP地址和端口号，并创建Simulator实例来处理底层通信。
 
 ```mermaid
 classDiagram
@@ -124,14 +113,12 @@ class Client {
 Client --> Simulator : "使用"
 ```
 
-**图表来源**
-
+**图表来源**  
 - [Client.h](https://github.com/carla-simulator/carla/blob/ue5-dev/LibCarla/source/carla/client/Client.h)
 - [Simulator.h](https://github.com/carla-simulator/carla/blob/ue5-dev/LibCarla/source/carla/client/detail/Simulator.h)
 
-### Simulator 类分析
-
-Simulator 类是客户端的核心，负责管理与 CARLA 服务器的通信。它处理 RPC 调用、流媒体数据传输和会话状态管理。
+### Simulator类分析
+Simulator类是客户端的核心，负责管理与CARLA服务器的通信。它处理RPC调用、流媒体数据传输和会话状态管理。
 
 ```mermaid
 classDiagram
@@ -258,14 +245,12 @@ Simulator --> World : "返回"
 Simulator --> WorldSnapshot : "返回"
 ```
 
-**图表来源**
-
+**图表来源**  
 - [Simulator.h](https://github.com/carla-simulator/carla/blob/ue5-dev/LibCarla/source/carla/client/detail/Simulator.h)
 - [Simulator.cpp](https://github.com/carla-simulator/carla/blob/ue5-dev/LibCarla/source/carla/client/detail/Simulator.cpp)
 
 ### 连接和会话管理
-
-Client 类的构造函数负责建立与 CARLA 服务器的连接。它接收服务器的 IP 地址、端口号和工作线程数作为参数，并创建 Simulator 实例来管理会话。
+Client类的构造函数负责建立与CARLA服务器的连接。它接收服务器的IP地址、端口号和工作线程数作为参数，并创建Simulator实例来管理会话。
 
 ```mermaid
 sequenceDiagram
@@ -281,14 +266,12 @@ Simulator-->>Client : 返回成功
 Client->>Client : 设置超时时间
 ```
 
-**图表来源**
-
+**图表来源**  
 - [Client.h](https://github.com/carla-simulator/carla/blob/ue5-dev/LibCarla/source/carla/client/Client.h)
 - [Simulator.h](https://github.com/carla-simulator/carla/blob/ue5-dev/LibCarla/source/carla/client/detail/Simulator.h)
 - [Simulator.cpp](https://github.com/carla-simulator/carla/blob/ue5-dev/LibCarla/source/carla/client/detail/Simulator.cpp)
 
 ### 异步操作模式
-
 C++客户端支持异步操作模式，允许在不阻塞主线程的情况下执行各种操作。这通过工作线程池和回调机制实现。
 
 ```mermaid
@@ -304,20 +287,17 @@ H --> I[返回结果]
 C --> J[返回结果]
 ```
 
-**图表来源**
-
+**图表来源**  
 - [Client.h](https://github.com/carla-simulator/carla/blob/ue5-dev/LibCarla/source/carla/client/Client.h)
 - [Simulator.h](https://github.com/carla-simulator/carla/blob/ue5-dev/LibCarla/source/carla/client/detail/Simulator.h)
 
-**本节来源**
-
+**本节来源**  
 - [Client.h](https://github.com/carla-simulator/carla/blob/ue5-dev/LibCarla/source/carla/client/Client.h)
 - [Simulator.h](https://github.com/carla-simulator/carla/blob/ue5-dev/LibCarla/source/carla/client/detail/Simulator.h)
 - [Simulator.cpp](https://github.com/carla-simulator/carla/blob/ue5-dev/LibCarla/source/carla/client/detail/Simulator.cpp)
 
 ## 依赖分析
-
-C++客户端依赖于多个外部库和内部模块，包括 Boost.Asio 用于网络通信，msgpack 用于数据序列化，以及 Unreal Engine 用于图形渲染。这些依赖关系通过 CMake 构建系统进行管理。
+C++客户端依赖于多个外部库和内部模块，包括Boost.Asio用于网络通信，msgpack用于数据序列化，以及Unreal Engine用于图形渲染。这些依赖关系通过CMake构建系统进行管理。
 
 ```mermaid
 graph TD
@@ -331,28 +311,23 @@ D --> H[图形渲染]
 E --> I[构建系统]
 ```
 
-**图表来源**
-
+**图表来源**  
 - [CMake/Dependencies.cmake](https://github.com/carla-simulator/carla/blob/ue5-dev/CMake/Dependencies.cmake)
 - [CMakeLists.txt](https://github.com/carla-simulator/carla/blob/ue5-dev/CMakeLists.txt)
 
-**本节来源**
-
+**本节来源**  
 - [CMake/Dependencies.cmake](https://github.com/carla-simulator/carla/blob/ue5-dev/CMake/Dependencies.cmake)
 - [CMakeLists.txt](https://github.com/carla-simulator/carla/blob/ue5-dev/CMakeLists.txt)
 
 ## 性能考虑
-
 C++客户端在设计时考虑了性能优化，包括使用工作线程池处理异步操作，减少主线程阻塞；使用高效的数据序列化格式(msgpack)减少网络传输开销；以及通过连接池管理长连接，减少连接建立的开销。
 
-**本节来源**
-
+**本节来源**  
 - [Client.h](https://github.com/carla-simulator/carla/blob/ue5-dev/LibCarla/source/carla/client/Client.h)
 - [Simulator.h](https://github.com/carla-simulator/carla/blob/ue5-dev/LibCarla/source/carla/client/detail/Simulator.h)
 
 ## 故障排除指南
-
-当遇到连接问题时，首先检查 CARLA 服务器是否正在运行，并确认 IP 地址和端口号是否正确。如果出现超时异常，可以尝试增加超时时间。对于版本不匹配的问题，确保客户端和服务器使用相同的 API 版本。
+当遇到连接问题时，首先检查CARLA服务器是否正在运行，并确认IP地址和端口号是否正确。如果出现超时异常，可以尝试增加超时时间。对于版本不匹配的问题，确保客户端和服务器使用相同的API版本。
 
 ```mermaid
 flowchart TD
@@ -364,16 +339,13 @@ B --> |版本不匹配| F[更新客户端或服务器]
 B --> |其他| G[查看日志文件]
 ```
 
-**图表来源**
-
+**图表来源**  
 - [TimeoutException.h](https://github.com/carla-simulator/carla/blob/ue5-dev/LibCarla/source/carla/client/TimeoutException.h)
 - [TimeoutException.cpp](https://github.com/carla-simulator/carla/blob/ue5-dev/LibCarla/source/carla/client/TimeoutException.cpp)
 
-**本节来源**
-
+**本节来源**  
 - [TimeoutException.h](https://github.com/carla-simulator/carla/blob/ue5-dev/LibCarla/source/carla/client/TimeoutException.h)
 - [TimeoutException.cpp](https://github.com/carla-simulator/carla/blob/ue5-dev/LibCarla/source/carla/client/TimeoutException.cpp)
 
 ## 结论
-
-CARLA C++客户端提供了一个功能强大且易于使用的接口，用于与 CARLA 模拟器进行交互。通过 Client 类和 Simulator 类的分层设计，客户端既提供了高级的 API 接口，又保持了良好的性能和可扩展性。开发者可以利用这些功能快速构建自动驾驶和机器人应用。
+CARLA C++客户端提供了一个功能强大且易于使用的接口，用于与CARLA模拟器进行交互。通过Client类和Simulator类的分层设计，客户端既提供了高级的API接口，又保持了良好的性能和可扩展性。开发者可以利用这些功能快速构建自动驾驶和机器人应用。
